@@ -14,6 +14,8 @@ from mwzeval.utils import has_domain_predictions, get_domain_estimates_from_stat
 from mwzeval.utils import has_state_predictions
 from mwzeval.utils import load_goals, load_booked_domains, load_gold_states
 
+from ext.MultiWOZ_Evaluation.mwzeval.utils import load_dstc11_gold_states
+
 
 class Evaluator:
 
@@ -32,7 +34,7 @@ class Evaluator:
             self.booked_domains = load_booked_domains()
 
         if dst:
-            self.gold_states = load_gold_states() 
+            self.gold_states = load_dstc11_gold_states()
 
     def evaluate(self, input_data):
         normalize_data(input_data)
@@ -265,13 +267,15 @@ def get_dst(input_data, reference_states, fuzzy_ratio=95):
                 constraints[(domain, s)] = v
         return constraints
 
-    def is_matching(hyp, ref):
+    def is_matching(fn, turn_id, hyp, ref):
         hyp_k = hyp.keys()
         ref_k = ref.keys()
         if hyp_k != ref_k:
             return False
         for k in ref_k:
             if fuzz.partial_ratio(hyp[k], ref[k]) <= fuzzy_ratio:
+                if 'name' in k or 'destination' in k or 'departure':
+                    print(fn, turn_id, k, '//ref:', ref[k], '//hyp:', hyp[k])
                 return False
         return True
 
@@ -304,7 +308,7 @@ def get_dst(input_data, reference_states, fuzzy_ratio=95):
                 ref = flatten(reference_states[dialog_id][i])
                 hyp = flatten(turn['state'])
 
-                if is_matching(hyp, ref):
+                if is_matching(dialog_id, i, hyp, ref):
                     joint_match += 1
                 
                 tp, fp, fn = compare(hyp, ref)

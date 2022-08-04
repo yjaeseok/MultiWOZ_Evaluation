@@ -4,6 +4,8 @@ import urllib.request
 
 from mwzeval.normalization import normalize_data
 
+from utils.parse_utils import parse_bspn
+
 
 def has_domain_predictions(data):
     for dialog in data.values():
@@ -111,7 +113,26 @@ def load_gold_states():
     _, states = load_multiwoz22()
     return states
 
-    
+
+def load_dstc11_gold_states():
+    data_path = "./data/multiwoz-processed/data_processed.json"
+    if os.path.exists(data_path):
+        with open(data_path) as f:
+            dev_dials = json.load(f)
+            gold_states = {}
+            for fn, dials in dev_dials.items():
+                for idx, log in enumerate(dials['log']):
+                    if idx == 0:
+                        gold_states[fn] = []
+                    gold_state = parse_bspn(log['constraint'])
+                    gold_states[fn].append(gold_state)
+            return gold_states
+
+    print('load_dstc11_gold_states, but data is not exist ')
+    _, states = load_multiwoz22()
+    return states
+
+
 def load_multiwoz22():
 
     def delexicalize_utterance(utterance, span_info):
