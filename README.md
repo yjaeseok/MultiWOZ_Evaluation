@@ -43,9 +43,9 @@ pip install -r requirements.txt
 And evaluate you predictions from the input file:
 
 ``` sh
-python evaluate.py [--bleu] [--success] [--richness] --input INPUT.json [--output OUTPUT.json]
+python evaluate.py [--bleu] [--success] [--richness] [--dst] --input INPUT.json [--output OUTPUT.json]
 ```
-Set the options `--bleu`, `--success`, and `--richness` as you wish.
+Set the options `--bleu`, `--success`, `--richness` and `--dst` as you wish.
 
 
 #### Input format:
@@ -90,7 +90,13 @@ See the [`predictions`](predictions) folder with examples.
     "richness" : {
         'entropy': … , 'cond_entropy': … , 'avg_lengths': … , 'msttr': … , 
         'num_unigrams': … , 'num_bigrams': … , 'num_trigrams': … 
-    }
+    },
+    "dst": {
+        'joint_accuracy': … ,
+        'slot_f1': … ,
+        'slot_precision': … ,
+        'slot_recall': …
+  }
 }
 ```
 The evaluation script outputs a dictionary with keys `bleu`, `success`, and `richness` corresponding to BLEU, Inform & Success rates, and lexical richness metrics, respectively. Their values can be `None` if not evaluated, otherwise: 
