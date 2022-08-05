@@ -114,18 +114,35 @@ def load_gold_states():
     return states
 
 
+GENERAL_TYPO = {
+    "guesthouse":"guest house"
+}
+
+
+def fix_general_error(state):
+    for domain, slot_values in state.items():
+        for slot, value in slot_values.items():
+            if value in GENERAL_TYPO.keys():
+                state[domain][slot] = GENERAL_TYPO[value]
+    return state
+
+
 def load_dstc11_gold_states():
     data_path = "./data/multiwoz-processed/data_processed.json"
     if os.path.exists(data_path):
+        with open('./data/multiwoz-processed/dev_set.json', 'r') as f:
+            dev_set = json.loads(f.read().lower())
         with open(data_path) as f:
             dev_dials = json.load(f)
             gold_states = {}
             for fn, dials in dev_dials.items():
-                for idx, log in enumerate(dials['log']):
-                    if idx == 0:
-                        gold_states[fn] = []
-                    gold_state = parse_bspn(log['constraint'])
-                    gold_states[fn].append(gold_state)
+                if fn in dev_set:
+                    for idx, log in enumerate(dials['log']):
+                        if idx == 0:
+                            gold_states[fn] = []
+                        gold_state = parse_bspn(log['constraint'])
+                        gold_state = fix_general_error(gold_state)
+                        gold_states[fn].append(gold_state)
             return gold_states
 
     print('load_dstc11_gold_states, but data is not exist ')

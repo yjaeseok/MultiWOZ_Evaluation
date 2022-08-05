@@ -71,7 +71,7 @@ def normalize_state_slot_value(slot_name, value):
     
     def type_to_canonical(type_string): 
         if type_string == "swimming pool":
-            return "swimmingpool" 
+            return "swimmingpool"
         elif type_string == "mutliple sports":
             return "multiple sports"
         elif type_string == "night club":

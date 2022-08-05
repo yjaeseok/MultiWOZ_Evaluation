@@ -37,7 +37,7 @@ class Evaluator:
             self.gold_states = load_dstc11_gold_states()
 
     def evaluate(self, input_data):
-        normalize_data(input_data)
+        # normalize_data(input_data)
         return {
             "bleu"     : get_bleu(input_data, self.reference_dialogs)                             if self.bleu else None,
             "success"  : get_success(input_data, self.database, self.goals, self.booked_domains)  if self.success else None,
