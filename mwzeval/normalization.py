@@ -27,7 +27,20 @@ def normalize_data(input_data):
                     elif slot == "leaveat": slot = "leave"
                     new_state[slot] =  normalize_state_slot_value(slot, value)
                 turn["state"][domain] = new_state
-    
+
+
+def normalize_response_data(input_data):
+    """ In-place normalization of raw dictionary with input data. Normalize slot names, slot values, remove plurals and detokenize utterances. """
+
+    mt, md = MosesTokenizer(lang='en'), MosesDetokenizer(lang='en')
+    slot_name_re = re.compile(r'\[([\w\s\d]+)\](es|s|-s|-es|)')
+    slot_name_normalizer = partial(slot_name_re.sub, lambda x: normalize_slot_name(x.group(1)))
+
+    for dialogue in input_data.values():
+        for turn in dialogue:
+            turn["response"] = slot_name_normalizer(turn["response"].lower())
+            turn["response"] = md.detokenize(mt.tokenize(turn["response"].replace('-s', '').replace('-ly', '')))
+
 
 def normalize_slot_name(slot_name):
     """ Map a slot name to the new unified ontology. """
