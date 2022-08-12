@@ -6,12 +6,9 @@ from sacrebleu import corpus_bleu
 from lexical_diversity import lex_div as ld
 from fuzzywuzzy import fuzz
 
-from mwzeval.utils import load_references
-from mwzeval.database import MultiWOZVenueDatabase
-
-from mwzeval.utils import has_domain_predictions, get_domain_estimates_from_state
-from mwzeval.utils import has_state_predictions
-from mwzeval.utils import load_goals, load_booked_domains, load_gold_states
+from ext.MultiWOZ_Evaluation.mwzeval.utils import load_references, has_state_predictions, load_gold_states, has_domain_predictions, \
+    get_domain_estimates_from_state, load_goals, load_booked_domains
+from ext.MultiWOZ_Evaluation.mwzeval.database import MultiWOZVenueDatabase
 
 from ext.MultiWOZ_Evaluation.mwzeval.normalization import normalize_response_data
 from ext.MultiWOZ_Evaluation.mwzeval.utils import load_dstc11_gold_states

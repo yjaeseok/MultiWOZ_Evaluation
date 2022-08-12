@@ -2,8 +2,7 @@ import os
 import json
 import urllib.request
 
-from mwzeval.normalization import normalize_data
-
+from ext.MultiWOZ_Evaluation.mwzeval.normalization import normalize_data
 from utils.parse_utils import parse_bspn
 
 

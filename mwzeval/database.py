@@ -2,7 +2,7 @@ import os
 import json
 
 from fuzzywuzzy import fuzz
-from mwzeval.normalization import normalize_state_slot_value, time_str_to_minutes
+from ext.MultiWOZ_Evaluation.mwzeval.normalization import normalize_state_slot_value, time_str_to_minutes
 
 
 class MultiWOZVenueDatabase:
