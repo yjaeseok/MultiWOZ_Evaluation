@@ -271,8 +271,6 @@ def get_dst(input_data, reference_states, fuzzy_ratio=95):
             return False
         for k in ref_k:
             if fuzz.partial_ratio(hyp[k], ref[k]) <= fuzzy_ratio:
-                if 'name' in k or 'destination' in k or 'departure':
-                    print(fn, turn_id, k, '//ref:', ref[k], '//hyp:', hyp[k])
                 return False
         return True
 
